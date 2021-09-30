@@ -6,7 +6,7 @@ We introduce Self-GenomeNet, a novel contrastive self-supervised learning method
 <a href="colabs/finetuning.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 <!-- ADD COLLAB LINK -->
 
-<!-- ADD Table here -->
+<!-- ADD TABLE? -->
 
 ## Enviromental setup
 
@@ -23,23 +23,33 @@ while IFS=" " read -r package version;
 do
   Rscript -e "devtools::install_version('"$package"', version='"$version"',repos = '"https://cloud.r-project.org"')";
 done < "requirementsR.txt"
+Rscript -e "devtools::install_github("GenomeNet/deepG")"
 ```
+Please note, that the package ``devtools`` needs to be installed in prior.
 
 ## Pretraining: Self-supervised model
+
+First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
 
 To pretrain the model on <!-- ADD DATASET FOR CODE TRIAL -->, try the following command:
 
 ```
-Rscript run/pretraining.R
+Rscript run_pretraining.R
 ```
 
-## Semi-supervised learning
+As a reference, the above run should result in a CPC loss around XXX<!-- add achieved value here-->.
+
+## Semi-supervised learning: Supervised part
+
+We now want to use the pretrained self-supervised model in a supervised step for classification of YYY<!--add target name-->. 
 
 To train the whole network on <!-- ADD DATASET FOR CODE TRIAL -->, try the following command:
 
 ```
-Rscript run/run_supervised.R
+Rscript run_supervised.R
 ```
+
+As a reference, the above run should result in an accuracy around XXX<!-- add achieved value here-->% for classifying YYY<!--add target name-->.
 
 ## Cite
 
