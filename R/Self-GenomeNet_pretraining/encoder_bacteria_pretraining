@@ -6,13 +6,8 @@ encoder_bacteria_pretraining <- function(maxlen){
   output_tensor <- input_tensor %>%
   keras::layer_conv_1d(
             kernel_size = 40,
-            #padding = "valid",
-            #activation = "relu",
             filters = 1024,
             strides = 20,
-            #batch_input_shape = NULL,
-            #input_shape = c(maxlen, vocabulary.size),
-            #use_bias = use_bias
             )
         
   #output_tensor <- output_tensor %>% keras::layer_max_pooling_1d(pool_size = 3, strides = 3)
