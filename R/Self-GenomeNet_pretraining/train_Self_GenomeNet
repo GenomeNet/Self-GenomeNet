@@ -1,3 +1,11 @@
+library(keras)
+library(deepG)
+library(magrittr)
+library(tensorflow)
+library(tfdatasets)
+library(tfautograph)
+library(purrr)
+
 train_Self_GenomeNet <-
   function(path,
            path.val,
