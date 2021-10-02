@@ -27,3 +27,4 @@ create_model_danq_unidirectional_lstm <- function(
   model %>% keras::compile(loss = "binary_crossentropy", optimizer = optimizer, metrics = c("acc"))
   model
   }
+model <- create_model_danq()
