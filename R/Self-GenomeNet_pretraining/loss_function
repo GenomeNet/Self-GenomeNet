@@ -9,12 +9,7 @@ loss_function <- function(latents,
   # define empty lists for metrics
   loss <- list()
   acc <- list()
-
-  if (isTRUE(ACGT) & isFALSE(onlysameposition)){
-    loss1 <- list()
-    acc1 <- list()
-  }  
-  
+ 
   # create context tensor
   ctx <- context(latents)
   c_dim <- latents$shape[[2]]
