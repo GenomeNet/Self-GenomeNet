@@ -11,7 +11,7 @@ train_Self_GenomeNet <-
            path.val,
            encoder,
            context,
-           cpcloss,
+           loss_function,
            batch.size,
            epochs,
            steps.per.epoch,
@@ -64,7 +64,7 @@ train_Self_GenomeNet <-
       model <-
         keras_model(
           encoder$input,
-          cpcloss(
+          loss_function(
             encoder$output,
             context,
             batch.size = batch.size,
