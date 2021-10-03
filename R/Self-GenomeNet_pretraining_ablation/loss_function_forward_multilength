@@ -1,4 +1,4 @@
-loss_function_forward <- function(latents,
+loss_function_forward_multilength <- function(latents,
                 context,
                 target_dim = NULL,
                 steps_to_ignore = 3,
