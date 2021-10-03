@@ -1,8 +1,0 @@
-ctx1 <- ctx[(1:batch.size), ,] %>% layer #kernel_regularizer=custom_involutary_regularizer)
-          
-        #ctx1 <- ctx %>% layer_dense(units=target_dim)
-        ctx2 <- ctx[(1+batch.size):(batch.size*2), ,] #%>% layer_conv_1d(kernel_size = 1,
-
-        logits <- tf$matmul(ctx1[,22-value-3,], tf$transpose(ctx2[,value,]))
-        # always the patch from the same batch is the true one
-        labels <- floor(seq(0,(batch.size-1)))%>% as.integer()#((dim(revcompl1)[[2]] - (i + 1))*2)) %>% as.integer() #,floor(dim(logits)[[1]]/batch.size)
