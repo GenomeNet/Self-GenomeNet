@@ -37,7 +37,7 @@ train_Self_GenomeNet <-
         path,
         batch.size = batch.size,
         maxlen = maxlen,
-        step = fasta_file_step,
+        step = file_step,
         max_samples = file_max_samples,
         randomFiles = TRUE,
         proportion_per_file = proportion_per_file
@@ -47,7 +47,7 @@ train_Self_GenomeNet <-
         path.val,
         batch.size = batch.size,
         maxlen = maxlen,
-        step = fasta_file_step,
+        step = file_step,
         max_samples = file_max_samples,
         randomFiles = TRUE,
         proportion_per_file = proportion_per_file
@@ -55,7 +55,7 @@ train_Self_GenomeNet <-
     
     
     # metrics
-    optimizer <- optimizer_adam(lr = learningrate)
+    optimizer <- optimizer_adam(learning_rate = learningrate)
     train_loss <- tf$keras$metrics$Mean(name = 'train_loss')
     val_loss <- tf$keras$metrics$Mean(name = 'val_loss')
     train_acc <- tf$keras$metrics$Mean(name = 'train_acc')
@@ -111,7 +111,6 @@ train_Self_GenomeNet <-
         train_acc(acc)
         
       }
-      
       
       with(writertrain$as_default(), {
         tf$summary$scalar('epoch_loss',
@@ -175,7 +174,7 @@ train_Self_GenomeNet <-
         if (i %% save_every_xth_epoch == 0) {
           model %>% save_model_hdf5(
             paste(
-              "/home/gunduza/projects/cpc_models/",
+              "pretrained_models/",
               run.name,
               "_Epoch_",
               as.array(i),
@@ -183,10 +182,6 @@ train_Self_GenomeNet <-
               sep = ""
             )
           )
-          #file.rename(
-          #  paste("/home/gunduza/projects/cpc_models/", run.name, "mid_temp.h5", sep = ""),
-          #  paste("/home/gunduza/projects/cpc_models/", run.name, "mid.h5", sep = "")
-          #)
           cat("---------- New recent model saved\n")
         }
       }

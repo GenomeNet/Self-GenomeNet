@@ -35,7 +35,7 @@ loss_functionSG <- function(latents,
     }
     # labels
     labels <-
-      rep(c(seq(batch.size, (2 * batch.size - 1))), (seq(0, (batch.size - 1))), (dim(ctx1)[[2]] - (i + 1))) %>% as.integer()
+      rep(c(seq(batch.size, (2 * batch.size - 1)), (seq(0, (batch.size - 1)))), (dim(ctx1)[[2]] - (i + 1))) %>% as.integer()
     
     # calculate loss and accuracy for each step
     loss[[length(loss) + 1]] <-
