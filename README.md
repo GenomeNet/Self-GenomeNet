@@ -31,10 +31,10 @@ Please note, that the package ``devtools`` needs to be installed in prior.
 
 First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
 
-To pretrain the model on <!-- ADD DATASET FOR CODE TRIAL -->, try the following command:
+To pretrain the model on Virus Data, try the following command:
 
 ```
-Rscript run_pretraining.R
+Rscript R/Self-GenomeNet_pretraining/virus/run_train_Self_GenomeNet.R
 ```
 
 As a reference, the above run should result in a CPC loss around XXX<!-- add achieved value here-->.
