@@ -2,8 +2,8 @@ source("R/Self-GenomeNet_pretraining/virus/train_Self_GenomeNet.R")
 source("R/Self-GenomeNet_pretraining/virus/context_virus_pretraining.R")
 source("R/Self-GenomeNet_pretraining/virus/encoder_virus_pretraining.R")
 source("R/Self-GenomeNet_pretraining/virus/loss_functionSG.R")
-train_data_folder <- "data/virus-no-phage-data/train"
-validation_data_folder <- "data/virus-no-phage-data/validation"
+train_data_folder <- list("data/virus-no-phage-data/train","data/virus-phage-data/train")
+validation_data_folder <- list("data/virus-no-phage-data/validation","data/virus-phage-data/validation")
 tensorboard_folder <- "tensorboard"
 
 train_Self_GenomeNet(
