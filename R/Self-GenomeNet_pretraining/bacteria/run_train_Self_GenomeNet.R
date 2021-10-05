@@ -22,5 +22,5 @@ train_Self_GenomeNet(
   trained_model   = NULL,
   savemodels      = TRUE,
   save_every_xth_epoch = 100,
-  proportion_per_file = 0.9
+  proportion_per_file = 0.1
 )
