@@ -12,7 +12,8 @@ loss_function_reverse <- function(latents,
   acc <- list()
   
   # create context tensor
-  ctx <- context(latents)
+  ctx <- context(latents) 
+  target_dim <- ctx$shape[[3]]
   # loop for different distances of predicted patches
   for (i in seq(steps_to_ignore, (steps_to_predict - 1), steps_skip)) {
     layer <- layer_conv_1d(kernel_size = 1, filters = target_dim)
@@ -26,8 +27,7 @@ loss_function_reverse <- function(latents,
       tf$stack(axis = 0) %>% tf$reduce_mean()
     acc[[length(acc) + 1]] <-
       tf$keras$metrics$sparse_top_k_categorical_accuracy(tf$cast(labels, dtype = "int64"),
-        logits,
-        as.integer(k)) %>%
+        logits) %>%
       tf$stack(axis = 0) %>% tf$reduce_mean()
     ctx1 <- ctx[(1 + batch.size):(batch.size * 2), ,] %>% layer
     ctx2 <- ctx[(1:batch.size), ,]
@@ -42,8 +42,7 @@ loss_function_reverse <- function(latents,
       tf$stack(axis = 0) %>% tf$reduce_mean()
     acc[[length(acc) + 1]] <-
       tf$keras$metrics$sparse_top_k_categorical_accuracy(tf$cast(labels, dtype = "int64"),
-        logits,
-        as.integer(k)) %>%
+        logits, 1L) %>%
       tf$stack(axis = 0) %>% tf$reduce_mean()
   }
   

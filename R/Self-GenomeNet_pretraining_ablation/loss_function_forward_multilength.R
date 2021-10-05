@@ -13,6 +13,7 @@ loss_function_forward_multilength <- function(latents,
   
   # create context tensor
   ctx <- context(latents)
+  target_dim <- ctx$shape[[3]]
   # loop for different distances of predicted patches
   for (i in seq(steps_to_ignore, (steps_to_predict - 1), steps_skip)) {
     target_dim <- ctx$shape[[3]]
@@ -27,7 +28,7 @@ loss_function_forward_multilength <- function(latents,
       tf$nn$sparse_softmax_cross_entropy_with_logits(labels, logits) %>%
       tf$stack(axis = 0) %>% tf$reduce_mean()
     acc[[length(acc) + 1]] <-
-      tf$keras$metrics$sparse_top_k_categorical_accuracy(tf$cast(labels, dtype = "int64"), logits, as.integer(1)) %>%
+      tf$keras$metrics$sparse_top_k_categorical_accuracy(tf$cast(labels, dtype = "int64"), logits, 1L) %>%
       tf$stack(axis = 0) %>% tf$reduce_mean()
   }
   

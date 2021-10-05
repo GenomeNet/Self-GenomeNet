@@ -39,7 +39,7 @@ train_Self_GenomeNet_forward_multilength <-
         path,
         batch.size = batch.size,
         maxlen = maxlen,
-        step = fasta_file_step,
+        step = file_step,
         max_samples = file_max_samples,
         randomFiles = TRUE,
         proportion_per_file = proportion_per_file
@@ -49,7 +49,7 @@ train_Self_GenomeNet_forward_multilength <-
         path.val,
         batch.size = batch.size,
         maxlen = maxlen,
-        step = fasta_file_step,
+        step = file_step,
         max_samples = file_max_samples,
         randomFiles = TRUE,
         proportion_per_file = proportion_per_file
@@ -57,7 +57,7 @@ train_Self_GenomeNet_forward_multilength <-
     
     
     # metrics
-    optimizer <- optimizer_adam(lr = learningrate)
+    optimizer <- optimizer_adam(learning_rate = learningrate)
     train_loss <- tf$keras$metrics$Mean(name = 'train_loss')
     val_loss <- tf$keras$metrics$Mean(name = 'val_loss')
     train_acc <- tf$keras$metrics$Mean(name = 'train_acc')
@@ -69,9 +69,9 @@ train_Self_GenomeNet_forward_multilength <-
       layer <- layer_conv_1d(kernel_size = 1,
         filters = 512)
     } else {
-      encoder <- model$layers[[2]]
-      context_layer <- model$layers[[3]]
-      layer <- model$layers[[6]]
+      encoder <- trained_model$layers[[2]]
+      context_layer <- trained_model$layers[[3]]
+      layer <- trained_model$layers[[6]]
     }
     
     
@@ -85,7 +85,7 @@ train_Self_GenomeNet_forward_multilength <-
       #saveloss <- list()
       for (b in seq(batches)) {
         val <- sample(seq(18), 1)
-        model <-
+        .GlobalEnv$model <-
           keras_model(
             encoder$input,
             loss_function(
@@ -103,7 +103,7 @@ train_Self_GenomeNet_forward_multilength <-
           #implemented for 150-length virus pre-training for the model we use
           a_forward <-
             tf$convert_to_tensor(array(as.array(a)[, c(seq(133 - val * 6, 150, 1), seq(1, 132 -
-                val * 6, 1)),], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
+                val * 6, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
           a <- tf$concat(list(a, a_forward), axis = 0L)
           out <- model(a)
           l <- out[1]
@@ -158,7 +158,7 @@ train_Self_GenomeNet_forward_multilength <-
         #implemented for 150-length virus pre-training for the model we use
         a_forward <-
           tf$convert_to_tensor(array(as.array(a)[, c(seq(133 - val * 6, 150, 1), seq(1, 132 -
-              val * 6, 1)),], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
+              val * 6, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
         a <- tf$concat(list(a, a_forward), axis = 0L)
         out <- model(a)
         l <- out[1]
@@ -196,7 +196,7 @@ train_Self_GenomeNet_forward_multilength <-
         if (i %% save_every_xth_epoch == 0) {
           model %>% save_model_hdf5(
             paste(
-              "/home/gunduza/projects/cpc_models/",
+              "pretrained_models/",
               run.name,
               "_Epoch_",
               as.array(i),
@@ -204,10 +204,6 @@ train_Self_GenomeNet_forward_multilength <-
               sep = ""
             )
           )
-          #file.rename(
-          #  paste("/home/gunduza/projects/cpc_models/", run.name, "mid_temp.h5", sep = ""),
-          #  paste("/home/gunduza/projects/cpc_models/", run.name, "mid.h5", sep = "")
-          #)
           cat("---------- New recent model saved\n")
         }
       }
