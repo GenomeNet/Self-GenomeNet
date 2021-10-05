@@ -33,26 +33,15 @@ train_Self_GenomeNet <-
       file_step <- maxlen
     }
     fastrain <-
-      fastaFileGenerator(
+      gen_rds(
         path,
-        batch.size = batch.size,
-        maxlen = maxlen,
-        step = file_step,
-        max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
+        batch_size = batch.size
       )
     fasval <-
-      fastaFileGenerator(
+      gen_rds(
         path.val,
-        batch.size = batch.size,
-        maxlen = maxlen,
-        step = file_step,
-        max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
+        batch_size = batch.size
       )
-    
     
     # metrics
     optimizer <- optimizer_adam(learning_rate = learningrate)
@@ -94,7 +83,7 @@ train_Self_GenomeNet <-
       #saveloss <- list()
       for (b in seq(batches)) {
         with(tf$GradientTape() %as% tape, {
-          a <- fastrain()$X %>% tf$convert_to_tensor()
+          a <- fastrain()[[1]] %>% tf$convert_to_tensor()
           a_complement <-
             tf$convert_to_tensor(array(as.array(a)[, (dim(a)[2]):1, 4:1], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
           a <- tf$concat(list(a, a_complement), axis = 0L)
@@ -132,7 +121,7 @@ train_Self_GenomeNet <-
     
     val_loop <- function(batches = steps.per.epoch, epoch) {
       for (b in seq(ceiling(batches * 0.1))) {
-        a <- fasval()$X %>% tf$convert_to_tensor()
+        a <- fasval()[[1]] %>% tf$convert_to_tensor()
         a_complement <-
           #a[, tf$convert_to_tensor(seq((dim(a)[2]),1)), tf$convert_to_tensor(seq(4,1))]
           tf$convert_to_tensor(array(as.array(a)[, (dim(a)[2]):1, 4:1], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))

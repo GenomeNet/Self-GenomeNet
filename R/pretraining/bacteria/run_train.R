@@ -1,7 +1,7 @@
-source("R/Self-GenomeNet_pretraining/virus/train_Self_GenomeNet.R")
-source("R/Self-GenomeNet_pretraining/bacteria/context_bacteria_pretraining.R")
-source("R/Self-GenomeNet_pretraining/bacteria/encoder_bacteria_pretraining.R")
-source("R/Self-GenomeNet_pretraining/bacteria/loss_functionSG.R")
+source("R/pretraining/bacteria/train.R")
+source("R/pretraining/bacteria/context.R")
+source("R/pretraining/bacteria/encoder.R")
+source("R/pretraining/bacteria/loss_functionSG.R")
 train_data_folder <- "data/bacteria/train"
 validation_data_folder <- "data/bacteria/validation"
 tensorboard_folder <- "tensorboard"
@@ -13,14 +13,14 @@ train_Self_GenomeNet(
   encoder         = encoder_bacteria_pretraining(1000),
   context         = context_bacteria_pretraining,
   loss_function   = loss_functionSG,
-  batch.size      = 128,
-  epochs          = 1000,
-  steps.per.epoch = 400,
+  batch.size      = 2,#128,
+  epochs          = 5,#1000,
+  steps.per.epoch = 10,#,400,
   learningrate    = 0.0001,
   run.name        = paste("Self-GenomeNet", format(Sys.time(), "_%y%m%d_%H%M"), sep = ""),
   tensorboard.log = tensorboard_folder,
   trained_model   = NULL,
   savemodels      = TRUE,
-  save_every_xth_epoch = 100,
+  save_every_xth_epoch = 5,#100,
   proportion_per_file = 0.1
 )
