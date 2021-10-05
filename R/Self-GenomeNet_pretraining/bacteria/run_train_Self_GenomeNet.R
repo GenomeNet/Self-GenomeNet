@@ -1,17 +1,17 @@
-source("R/Self-GenomeNet_pretraining/bacteria/train_Self_GenomeNet.R")
+source("R/Self-GenomeNet_pretraining/virus/train_Self_GenomeNet.R")
 source("R/Self-GenomeNet_pretraining/bacteria/context_bacteria_pretraining.R")
 source("R/Self-GenomeNet_pretraining/bacteria/encoder_bacteria_pretraining.R")
 source("R/Self-GenomeNet_pretraining/bacteria/loss_functionSG.R")
-train_data_folder <- "data/where/bacteria/train"
-validation_data_folder <- "data/where/bacteria/validation"
+train_data_folder <- "data/bacteria/train"
+validation_data_folder <- "data/bacteria/validation"
 tensorboard_folder <- "tensorboard"
 
 train_Self_GenomeNet(
   path            = train_data_folder,
   path.val        = validation_data_folder,
   maxlen          = 1000,
-  encoder         = encoder_virus_pretraining(1000),
-  context         = context_virus_pretraining,
+  encoder         = encoder_bacteria_pretraining(1000),
+  context         = context_bacteria_pretraining,
   loss_function   = loss_functionSG,
   batch.size      = 128,
   epochs          = 1000,
