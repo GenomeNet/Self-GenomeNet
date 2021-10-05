@@ -19,14 +19,14 @@ train_Self_GenomeNet <-
     run.name,
     tensorboard.log,
     maxlen,
-    stepsmin = 1,
-    stepsmax = 10,
+    stepsmin = 3,
+    stepsmax = 4,
     file_step = NULL,
     file_max_samples = 64,
     trained_model = NULL,
     savemodels = FALSE,
     proportion_per_file = 0.9,
-    save_every_xth_epoch = 12) {
+    save_every_xth_epoch = 60) {
     # Prepare data
     cat("Preparing the data\n")
     if (is.null(file_step)) {
