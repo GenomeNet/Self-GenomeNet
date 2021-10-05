@@ -34,10 +34,22 @@ First, we will learn representations of the Genome Sequences with reverse-comple
 To pretrain the model on virus data, try the following command:
 
 ```
-Rscript R/Self-GenomeNet_pretraining/virus/run_train_Self_GenomeNet.R
+Rscript R/Self-GenomeNet_pretraining/virus/run_train.R
 ```
 
-As a reference, the above run should result in a CPC loss around XXX<!-- add achieved value here-->.
+For pretraining the model for deepSea data, try this command: 
+
+```
+Rscript R/Self-GenomeNet_pretraining/deepsea/run_train.R
+```
+Please note, that this is only a small part of the data used for presentation purpose. For running the model on full data to achieve the same results described in the paper, please download them from [the official homepage](http://deepsea.princeton.edu/job/analysis/create/) and run ``h5_to_rds.R``
+
+
+For running the model on Bacteria data, please download some Bacteria data from [NCBI](https://www.ncbi.nlm.nih.gov/assembly/) and put them in the folder ``data/bacteria``. Then run:
+
+```
+Rscript R/Self-GenomeNet_pretraining/bacteria/run_train.R
+```
 
 Run the ablation pretraining using the command:
 
@@ -47,17 +59,27 @@ Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_singlelenght.R  
 Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_multilenght.R   # for the forward multilength model
 ```
 
+
 ## Semi-supervised learning: Supervised part
 
-We now want to use the pretrained self-supervised model in a supervised step for classification of YYY<!--add target name-->. 
+We now want to use the pretrained self-supervised model in a supervised step for classification of the Genom's species type, so if it is a phage or a non-phage virus here. 
 
 To train the whole network on virus data, try the following command:
 
 ```
-Rscript run_supervised.R
+Rscript R/supervised/virus/supervised.R
 ```
 
-As a reference, the above run should result in an accuracy around XXX<!-- add achieved value here-->% for classifying YYY<!--add target name-->.
+For our transfer-learning task, classifying phage vs non-phage virus after training on bacteria data, please try this command:
+```
+Rscript R/supervised/bacteria/supervised.R
+```
+
+The deepSea data will classify on deepSea labels. Try using the command:
+```
+Rscript R/supervised/deepsea/supervised.R
+```
+
 
 ## Cite
 
