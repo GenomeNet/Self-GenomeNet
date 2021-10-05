@@ -31,7 +31,7 @@ Please note, that the package ``devtools`` needs to be installed in prior.
 
 First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
 
-To pretrain the model on Virus Data, try the following command:
+To pretrain the model on virus data, try the following command:
 
 ```
 Rscript R/Self-GenomeNet_pretraining/virus/run_train_Self_GenomeNet.R
@@ -39,11 +39,19 @@ Rscript R/Self-GenomeNet_pretraining/virus/run_train_Self_GenomeNet.R
 
 As a reference, the above run should result in a CPC loss around XXX<!-- add achieved value here-->.
 
+Run the ablation pretraining using the command:
+
+```
+Rscript R/Self-GenomeNet_pretraining_ablation/run_train_reverse_singlelenght.R  # for the reverse model 
+Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_singlelenght.R  # for the forward singlelength model
+Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_multilenght.R   # for the forward multilength model
+```
+
 ## Semi-supervised learning: Supervised part
 
 We now want to use the pretrained self-supervised model in a supervised step for classification of YYY<!--add target name-->. 
 
-To train the whole network on <!-- ADD DATASET FOR CODE TRIAL -->, try the following command:
+To train the whole network on virus data, try the following command:
 
 ```
 Rscript run_supervised.R
