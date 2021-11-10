@@ -57,7 +57,7 @@ train_Self_GenomeNet_forward_multilength <-
     
     
     # metrics
-    optimizer <- optimizer_adam(learning_rate = learningrate)
+    optimizer <- optimizer_adam(lr = learningrate)
     train_loss <- tf$keras$metrics$Mean(name = 'train_loss')
     val_loss <- tf$keras$metrics$Mean(name = 'val_loss')
     train_acc <- tf$keras$metrics$Mean(name = 'train_acc')
