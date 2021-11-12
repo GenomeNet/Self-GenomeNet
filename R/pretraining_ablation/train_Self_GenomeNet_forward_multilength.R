@@ -85,7 +85,7 @@ train_Self_GenomeNet_forward_multilength <-
       #saveloss <- list()
       for (b in seq(batches)) {
         val <- sample(seq(18), 1)
-        .GlobalEnv$model <-
+        model <-
           keras_model(
             encoder$input,
             loss_function(
