@@ -11,11 +11,10 @@ loss_functionSG <- function(latents,
   
   # create context tensor
   ctx <- context(latents)
-  c_dim <- latents$shape[[2]]
+  target_dim <- ctx$shape[[3]]
+  context_length <- ctx$shape[[2]]
   # loop for different distances of predicted patches
   for (i in seq(steps_to_ignore, (steps_to_predict - 1), steps_skip)) {
-    target_dim <- ctx$shape[[3]]
-    context_length <- ctx$shape[[2]]
     ctx1 <-
       ctx %>% layer_conv_1d(kernel_size = 1, filters = target_dim)
     ctx2 <- ctx
