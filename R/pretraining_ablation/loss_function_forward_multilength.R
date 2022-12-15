@@ -4,7 +4,7 @@ loss_function_forward_multilength <- function(latents,
   steps_to_ignore = 3,
   steps_to_predict = NULL,
   steps_skip = 1,
-  batch.size = 32,
+  batch_size = 32,
   value = NULL,
   layer = NULL) {
   # define empty lists for metrics
@@ -15,14 +15,14 @@ loss_function_forward_multilength <- function(latents,
   ctx <- context(latents)
   context_length <- ctx$shape[[2]]
   target_dim <- ctx$shape[[3]]
-  labels <- floor(seq(0, (batch.size - 1))) %>% as.integer()  
+  labels <- floor(seq(0, (batch_size - 1))) %>% as.integer()  
   #preds_i <- ctx %>% layer_conv_1d(kernel_size = 1, filters = target_dim)
   layer <- layer_conv_1d(kernel_size = 1, filters = target_dim)
   # loop for different distances of predicted patches
   for (i in seq(steps_to_ignore, (steps_to_predict - 1), steps_skip)) {
-    ctx1 <- ctx[(1:batch.size), ,]
+    ctx1 <- ctx[(1:batch_size), ,]
     ctx1 <- ctx1 %>% layer
-    ctx2 <- ctx[(1 + batch.size):(batch.size * 2), ,]
+    ctx2 <- ctx[(1 + batch_size):(batch_size * 2), ,]
     logits <-
       tf$matmul(ctx1[, context_length - value - steps_to_ignore,], tf$transpose(ctx2[, value,]))
     # calculate loss and accuracy for each step

@@ -8,19 +8,19 @@ tensorboard_folder <- "tensorboard"
 
 train_Self_GenomeNet_forward_singlelength(
   path            = train_data_folder,
-  path.val        = validation_data_folder,
+  path_val        = validation_data_folder,
   maxlen          = 150,
   encoder         = encoder_virus_pretraining(150),
   context         = context_virus_pretraining,
   loss_function   = loss_function_forward,
-  batch.size      = 512,
+  batch_size      = 512,
   epochs          = 360,
-  steps.per.epoch = 400,
+  steps_per_epoch = 400,
   learningrate    = 0.0001,
-  run.name        = paste("Self-GenomeNet_for_single", format(Sys.time(), "_%y%m%d_%H%M"), sep = ""),
-  tensorboard.log = tensorboard_folder,
+  run_name        = paste("Self-GenomeNet_for_single", format(Sys.time(), "_%y%m%d_%H%M"), sep = ""),
+  path_tensorboard = tensorboard_folder,
   trained_model   = NULL,
   savemodels      = TRUE,
   save_every_xth_epoch = 60,
-  proportion_per_file = 0.9
+  proportion_per_seq = 0.9
 )

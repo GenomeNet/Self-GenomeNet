@@ -4,7 +4,7 @@ loss_functionCPC <- function(latents,
   steps_to_ignore = 3,
   steps_to_predict = 4,
   steps_skip = 1,
-  batch.size = 32) {
+  batch_size = 32) {
   # define empty lists for metrics
   loss <- list()
   acc <- list()
@@ -19,7 +19,7 @@ loss_functionCPC <- function(latents,
       # define patches to be deleted
       c_dim_i <- c_dim - i - 1
       # define total number of elements in context tensor
-      total_elements <- batch.size * c_dim_i
+      total_elements <- batch_size * c_dim_i
       # add conv layer and reshape tensor for matrix multiplication
       targets <- latents %>% k_reshape(c(-1, target_dim))
       # add conv layer and reshape for matrix multiplication

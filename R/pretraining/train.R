@@ -8,52 +8,60 @@ library(purrr)
 
 train_Self_GenomeNet <-
   function(path,
-    path.val,
-    encoder,
-    context,
-    loss_function,
-    batch.size,
-    epochs,
-    steps.per.epoch,
-    learningrate,
-    run.name,
-    tensorboard.log,
-    maxlen,
-    stepsmin = 1,
-    stepsmax = 2,
-    file_step = NULL,
-    file_max_samples = 64,
-    trained_model = NULL,
-    savemodels = FALSE,
-    proportion_per_file = 0.1,
-    save_every_xth_epoch = 100) {
+           path_val,
+           encoder,
+           context,
+           loss_function,
+           batch_size,
+           epochs,
+           steps_per_epoch,
+           learningrate,
+           deepSea = F,
+           run_name,
+           path_tensorboard,
+           maxlen,
+           stepsmin = 2,
+           stepsmax = 20,
+           file_step = NULL,
+           file_max_samples = 64,
+           trained_model = NULL,
+           savemodels = FALSE,
+           proportion_per_seq = 0.1,
+           save_every_xth_epoch = 100) {
     # Prepare data
     cat("Preparing the data\n")
     if (is.null(file_step)) {
       file_step <- maxlen
     }
-    fastrain <-
-      fastaFileGenerator(
-        path,
-        batch.size = batch.size,
-        maxlen = maxlen,
-        step = file_step,
-        max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
-      )
-    fasval <-
-      fastaFileGenerator(
-        path.val,
-        batch.size = batch.size,
-        maxlen = maxlen,
-        step = file_step,
-        max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
-      )
-    
-    
+    if (deepSea) {
+      fastrain <-
+        generator_fasta_lm(
+          path,
+          batch_size = batch_size,
+          maxlen = maxlen,
+          step = file_step,
+          max_samples = file_max_samples,
+          shuffle_file_order = TRUE,
+          proportion_per_seq = proportion_per_seq
+        )
+      fasval <-
+        generator_fasta_lm(
+          path_val,
+          batch_size = batch_size,
+          maxlen = maxlen,
+          step = file_step,
+          max_samples = file_max_samples,
+          shuffle_file_order = TRUE,
+          proportion_per_seq = proportion_per_seq
+        )
+    } else {
+      fastrain <-
+        gen_rds(path,
+                batch_size = batch_size)
+      fasval <-
+        gen_rds(path_val,
+                batch_size = batch_size)
+    }
     # metrics
     optimizer <- optimizer_adam(learning_rate = learningrate)
     train_loss <- tf$keras$metrics$Mean(name = 'train_loss')
@@ -70,7 +78,7 @@ train_Self_GenomeNet <-
           loss_function(
             encoder$output,
             context,
-            batch.size = batch.size,
+            batch_size = batch_size,
             steps_to_ignore = stepsmin,
             steps_to_predict = stepsmax
           )
@@ -83,18 +91,20 @@ train_Self_GenomeNet <-
       model <- load_model_hdf5(trained_model)
     }
     
-    
     # connect tensorboard
-    logdir <- tensorboard.log
-    writertrain = tf$summary$create_file_writer(file.path(logdir, run.name, "/train"))
-    writerval = tf$summary$create_file_writer(file.path(logdir, run.name, "/validation"))
+    logdir <- path_tensorboard
+    writertrain = tf$summary$create_file_writer(file.path(logdir, run_name, "/train"))
+    writerval = tf$summary$create_file_writer(file.path(logdir, run_name, "/validation"))
     
     # batch loop
-    training_loop <- function(batches = steps.per.epoch, epoch) {
-      #saveloss <- list()
+    training_loop <- function(batches = steps_per_epoch, epoch) {
       for (b in seq(batches)) {
         with(tf$GradientTape() %as% tape, {
-          a <- fastrain()$X %>% tf$convert_to_tensor()
+          if (deepSea) {
+            a <- fastrain()[[1]] %>% tf$convert_to_tensor()
+          } else {
+            a <- fastrain()$X %>% tf$convert_to_tensor()
+          }
           a_complement <-
             tf$convert_to_tensor(array(as.array(a)[, (dim(a)[2]):1, 4:1], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
           a <- tf$concat(list(a, a_complement), axis = 0L)
@@ -109,35 +119,35 @@ train_Self_GenomeNet <-
         )))
         train_loss(l)
         train_acc(acc)
-        
       }
       
       with(writertrain$as_default(), {
         tf$summary$scalar('epoch_loss',
-          train_loss$result(),
-          step = tf$cast(epoch, "int64"))
+                          train_loss$result(),
+                          step = tf$cast(epoch, "int64"))
         tf$summary$scalar('epoch_accuracy',
-          train_acc$result(),
-          step = tf$cast(epoch, "int64"))
+                          train_acc$result(),
+                          step = tf$cast(epoch, "int64"))
       })
       
       tf$print("Train Loss",
-        train_loss$result(),
-        ", Train Acc",
-        train_acc$result())
-      
+               train_loss$result(),
+               ", Train Acc",
+               train_acc$result())
       train_loss$reset_states()
       train_acc$reset_states()
     }
     
-    val_loop <- function(batches = steps.per.epoch, epoch) {
+    val_loop <- function(batches = steps_per_epoch, epoch) {
       for (b in seq(ceiling(batches * 0.1))) {
-        a <- fasval()$X %>% tf$convert_to_tensor()
+        if (deepSea) {
+          a <- fasval()[[1]] %>% tf$convert_to_tensor()
+        } else {
+          a <- fasval()$X %>% tf$convert_to_tensor()
+        }
         a_complement <-
-          #a[, tf$convert_to_tensor(seq((dim(a)[2]),1)), tf$convert_to_tensor(seq(4,1))]
           tf$convert_to_tensor(array(as.array(a)[, (dim(a)[2]):1, 4:1], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
         a <- tf$concat(list(a, a_complement), axis = 0L)
-        #a_complement <- tf$convert_to_tensor(array(as.array(a)[ , (dim(a)[2]):1, 4:1], dim = c(dim(a)[1],dim(a)[2],dim(a)[3])))
         out <- model(a)
         l <- out[1]
         acc <- out[2]
@@ -148,20 +158,19 @@ train_Self_GenomeNet <-
       
       with(writerval$as_default(), {
         tf$summary$scalar('epoch_loss',
-          val_loss$result(),
-          step = tf$cast(epoch, "int64"))
+                          val_loss$result(),
+                          step = tf$cast(epoch, "int64"))
         tf$summary$scalar('epoch_accuracy',
-          val_acc$result(),
-          step = tf$cast(epoch, "int64"))
+                          val_acc$result(),
+                          step = tf$cast(epoch, "int64"))
       })
       tf$print("Validation Loss",
-        val_loss$result(),
-        ", Validation Acc",
-        val_acc$result())
+               val_loss$result(),
+               ", Validation Acc",
+               val_acc$result())
       
       val_loss$reset_states()
       val_acc$reset_states()
-      
     }
     
     # epoch loop
@@ -175,7 +184,7 @@ train_Self_GenomeNet <-
           model %>% save_model_hdf5(
             paste(
               "pretrained_models/",
-              run.name,
+              run_name,
               "_Epoch_",
               as.array(i),
               "_temp.h5",

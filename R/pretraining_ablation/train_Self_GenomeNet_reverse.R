@@ -10,16 +10,16 @@ library(purrr)
 
 train_Self_GenomeNet_reverse <-
   function(path,
-    path.val,
+    path_val,
     encoder,
     context,
     loss_function,
-    batch.size,
+    batch_size,
     epochs,
-    steps.per.epoch,
+    steps_per_epoch,
     learningrate,
-    run.name,
-    tensorboard.log,
+    run_name,
+    path_tensorboard,
     maxlen,
     stepsmin = 3,
     stepsmax = 4,
@@ -27,7 +27,7 @@ train_Self_GenomeNet_reverse <-
     file_max_samples = 64,
     trained_model = NULL,
     savemodels = FALSE,
-    proportion_per_file = 0.9,
+    proportion_per_seq = 0.9,
     save_every_xth_epoch = 12) {
     # Prepare data
     cat("Preparing the data\n")
@@ -35,24 +35,24 @@ train_Self_GenomeNet_reverse <-
       file_step <- maxlen
     }
     fastrain <-
-      fastaFileGenerator(
+      generator_fasta_lm(
         path,
-        batch.size = batch.size,
+        batch_size = batch_size,
         maxlen = maxlen,
         step = file_step,
         max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
+        shuffle_file_order = TRUE,
+        proportion_per_seq = proportion_per_seq
       )
     fasval <-
-      fastaFileGenerator(
-        path.val,
-        batch.size = batch.size,
+      generator_fasta_lm(
+        path_val,
+        batch_size = batch_size,
         maxlen = maxlen,
         step = file_step,
         max_samples = file_max_samples,
-        randomFiles = TRUE,
-        proportion_per_file = proportion_per_file
+        shuffle_file_order = TRUE,
+        proportion_per_seq = proportion_per_seq
       )
     
     
@@ -72,7 +72,7 @@ train_Self_GenomeNet_reverse <-
           loss_function(
             encoder$output,
             context,
-            batch.size = batch.size,
+            batch_size = batch_size,
             steps_to_ignore = stepsmin,
             steps_to_predict = stepsmax
           )
@@ -87,12 +87,12 @@ train_Self_GenomeNet_reverse <-
     
     
     # connect tensorboard
-    logdir <- tensorboard.log
-    writertrain = tf$summary$create_file_writer(file.path(logdir, run.name, "/train"))
-    writerval = tf$summary$create_file_writer(file.path(logdir, run.name, "/validation"))
+    logdir <- path_tensorboard
+    writertrain = tf$summary$create_file_writer(file.path(logdir, run_name, "/train"))
+    writerval = tf$summary$create_file_writer(file.path(logdir, run_name, "/validation"))
     
     # batch loop
-    training_loop <- function(batches = steps.per.epoch, epoch) {
+    training_loop <- function(batches = steps_per_epoch, epoch) {
       #saveloss <- list()
       for (b in seq(batches)) {
         with(tf$GradientTape() %as% tape, {
@@ -133,7 +133,7 @@ train_Self_GenomeNet_reverse <-
       train_acc$reset_states()
     }
     
-    val_loop <- function(batches = steps.per.epoch, epoch) {
+    val_loop <- function(batches = steps_per_epoch, epoch) {
       for (b in seq(ceiling(batches * 0.1))) {
         a <- fasval()$X %>% tf$convert_to_tensor()
         a_complement <-
@@ -177,7 +177,7 @@ train_Self_GenomeNet_reverse <-
           model %>% save_model_hdf5(
             paste(
               "pretrained_models/",
-              run.name,
+              run_name,
               "_Epoch_",
               as.array(i),
               "_temp.h5",

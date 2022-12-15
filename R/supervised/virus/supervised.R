@@ -21,29 +21,29 @@ model %>% compile(loss = "categorical_crossentropy",
   optimizer = optimizer,
   metrics = c("acc"))
 
-trainNetwork(
+train_model(
   train_type = "label_folder",
   model = model,
   path = c(
     "data/virus-phage-data/train_10percent",
     "data/virus-no-phage-data/train_10percent"
   ),
-  path.val = c(
+  path_val = c(
     "data/virus-phage-data/validation",
     "data/virus-no-phage-data/validation"
   ),
-  checkpoint_path = "checkpoints",
-  run.name = "semisupervised_paper_acgt_train_10percent_directfinetuning",
-  batch.size = 2048,
+  path_checkpoint = "checkpoints",
+  run_name = "semisupervised_paper_acgt_train_10percent_directfinetuning",
+  batch_size = 2048,
   epochs = 1000,
   patience = 3,
   cooldown = 1,
-  steps.per.epoch = 1000,
+  steps_per_epoch = 1000,
   step = 150,
-  randomFiles = TRUE,
+  shuffle_file_order = TRUE,
   vocabulary = c("a", "c", "g", "t"),
-  tensorboard.log = "tensorboard",
-  shuffleFastaEntries = TRUE,
+  path_tensorboard = "tensorboard",
+  shuffle_input = TRUE,
   output = list(
     none = FALSE,
     checkpoints = TRUE,
@@ -52,12 +52,12 @@ trainNetwork(
     serialize_model = FALSE,
     full_model = FALSE
   ),
-  labelVocabulary = c("virus-no-phage", "virus-phage"),
+  vocabulary_label = c("virus-no-phage", "virus-phage"),
   ambiguous_nuc = "discard",
-  proportion_per_file = c(0.9, 0.9),
+  proportion_per_seq = c(0.9, 0.9),
   seed = c(645, 456),
   skip_amb_nuc = 0.001,
-  lr.plateau.factor = 0.1,
-  validation.split = 0.2,
+  lr_plateau_factor = 0.1,
+  train_val_ratio = 0.2,
   max_samples = 64
 )

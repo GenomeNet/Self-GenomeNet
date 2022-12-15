@@ -1,21 +1,19 @@
 loss_functionSG <- function(latents,
-  context,
-  target_dim = NULL,
-  steps_to_ignore = 1,
-  steps_to_predict = 2,
-  steps_skip = 1,
-  batch.size = 32) {
+                            context,
+                            target_dim = NULL,
+                            steps_to_ignore = 3,
+                            steps_to_predict = 4,
+                            steps_skip = 1,
+                            batch_size = 32) {
   # define empty lists for metrics
   loss <- list()
   acc <- list()
-  
   # create context tensor
   ctx <- context(latents)
-  c_dim <- latents$shape[[2]]
+  target_dim <- ctx$shape[[3]]
+  context_length <- ctx$shape[[2]]
   # loop for different distances of predicted patches
   for (i in seq(steps_to_ignore, (steps_to_predict - 1), steps_skip)) {
-    target_dim <- ctx$shape[[3]]
-    context_length <- ctx$shape[[2]]
     ctx1 <-
       ctx %>% layer_conv_1d(kernel_size = 1, filters = target_dim)
     ctx2 <- ctx
@@ -23,9 +21,8 @@ loss_functionSG <- function(latents,
     for (j in seq_len(context_length - (i + 1))) {
       preds_ij <- ctx1[, j,] %>% k_reshape(c(-1, target_dim))
       revcompl_j <-
-        ctx2[, (context_length - j - i), ] %>% k_reshape(c(-1, target_dim))
+        ctx2[, (context_length - j - i),] %>% k_reshape(c(-1, target_dim))
       logitsnew <- tf$matmul(preds_ij, tf$transpose(revcompl_j))
-      logitsnew <- logitsnew
       if (isTRUE(logits_flag)) {
         logits <- tf$concat(list(logits, logitsnew), axis = 0L)
       } else {
@@ -35,7 +32,9 @@ loss_functionSG <- function(latents,
     }
     # labels
     labels <-
-      rep(c(seq(batch.size, (2 * batch.size - 1)), (seq(0, (batch.size - 1)))), (dim(ctx1)[[2]] - (i + 1))) %>% as.integer()
+      rep(c(seq(batch_size, (2 * batch_size - 1)), (seq(
+        0, (batch_size - 1)
+      ))), (dim(ctx1)[[2]] - (i + 1))) %>% as.integer()
     
     # calculate loss and accuracy for each step
     loss[[length(loss) + 1]] <-
