@@ -4,8 +4,7 @@ We introduce Self-GenomeNet, a novel contrastive self-supervised learning method
 
 ## Pre-trained models for Self-GenomeNet
 <a href="colabs/finetuning.ipynb" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
-<!-- ADD COLLAB LINK -->
-https://colab.research.google.com/drive/1gEm8WvOmN30X9LzH7VV53KDLpTqncpNr?usp=sharing
+<https://colab.research.google.com/drive/1gEm8WvOmN30X9LzH7VV53KDLpTqncpNr?usp=sharing>
 <!-- ADD TABLE? -->
 
 ## Enviromental setup
