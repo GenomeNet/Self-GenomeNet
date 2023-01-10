@@ -52,7 +52,6 @@ Rscript R/Self-GenomeNet_pretraining/bacteria/run_train.R
 Run the ablation pretraining using the command:
 
 ```
-Rscript R/Self-GenomeNet_pretraining_ablation/run_train_reverse_singlelenght.R  # for the reverse model 
 Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_singlelenght.R  # for the forward singlelength model
 ```
 
