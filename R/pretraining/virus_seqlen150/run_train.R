@@ -1,7 +1,7 @@
 source("R/pretraining/train.R")
 source("R/pretraining/loss_functionSG.R")
-source("R/pretraining/virus/context.R")
-source("R/pretraining/virus/encoder.R")
+source("R/pretraining/virus_seqlen150/context.R")
+source("R/pretraining/virus_seqlen150/encoder.R")
 train_data_folder <- list("data/virus-no-phage-data/train","data/virus-phage-data/train")
 validation_data_folder <- list("data/virus-no-phage-data/validation","data/virus-phage-data/validation")
 tensorboard_folder <- "tensorboard"
