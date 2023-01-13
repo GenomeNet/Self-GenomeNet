@@ -75,20 +75,3 @@ The deepSea data will classify on deepSea labels. Try using the command:
 Rscript R/supervised/deepsea/supervised.R
 ```
 
-
-## Cite
-
-<!-- ADD ARXIV WHEN PUBLISHED -->
-<!-- [Self-GenomeNet paper](https://arxiv.org/abs/xxxxxxxxxx): -->
-
-```
-@inproceedings{
-anonymous2022selfgenomenet,
-title={Self-GenomeNet: Self-supervised Learning with Reverse-Complement Context Prediction for Nucleotide-level Genomics Data},
-author={Anonymous},
-booktitle={Submitted to The Tenth International Conference on Learning Representations },
-year={2022},
-url={https://openreview.net/forum?id=92awwjGxIZI},
-note={under review}
-}
-```
