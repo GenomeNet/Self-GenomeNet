@@ -12,7 +12,7 @@ train_Self_GenomeNet(
   maxlen          = 1000,
   encoder         = encoder_deepsea_pretraining(1000),
   context         = context_deepsea_pretraining,
-  loss_function   = loss_functionSG_multi_q,
+  loss_function   = loss_functionSG,
   batch_size      = 128,
   epochs          = 600,
   steps_per_epoch = 400,
