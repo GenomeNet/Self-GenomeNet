@@ -21,5 +21,5 @@ train_Self_GenomeNet(
   path_tensorboard = tensorboard_folder,
   trained_model   = NULL,
   savemodels      = TRUE,
-  deepSea         = F,
+  deepSea         = TRUE,
 )
