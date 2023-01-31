@@ -23,6 +23,7 @@ loss_functionSG <- function(latents,
       revcompl_j <-
         ctx2[, (context_length - j - i),] %>% k_reshape(c(-1, target_dim))
       logitsnew <- tf$matmul(preds_ij, tf$transpose(revcompl_j))
+      logitsnew <- logitsnew - 1000*tf$eye(as.integer(2*batch.size))
       if (isTRUE(logits_flag)) {
         logits <- tf$concat(list(logits, logitsnew), axis = 0L)
       } else {
