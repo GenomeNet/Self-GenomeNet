@@ -1,5 +1,5 @@
 source("R/pretraining/train.R")
-source("R/pretraining/loss_functionSG.R")
+source("R/pretraining/loss_function_SG.R")
 source("R/pretraining/virus_seqlen1000/context.R")
 source("R/pretraining/virus_seqlen1000/encoder.R")
 train_data_folder <- list("data/virus-no-phage-data/train","data/virus-phage-data/train")
