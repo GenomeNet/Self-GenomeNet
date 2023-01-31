@@ -1,7 +1,7 @@
-source("R/Self-GenomeNet_pretraining_ablation/train_Self_GenomeNet_forward_multilength.R")
-source("R/Self-GenomeNet_pretraining/virus/context_virus_pretraining.R")
-source("R/Self-GenomeNet_pretraining/virus/encoder_virus_pretraining.R")
-source("R/Self-GenomeNet_pretraining_ablation/loss_function_forward_multilength.R")
+source("R/pretraining_ablation/train_Self_GenomeNet_forward_multilength.R")
+source("R/pretraining/virus_seqlen1000/context.R")
+source("R/pretraining/virus_seqlen1000/encoder.R")
+source("R/pretraining_ablation/loss_function_forward_multilength.R")
 train_data_folder <- list("data/virus-no-phage-data/train","data/virus-phage-data/train")
 validation_data_folder <- list("data/virus-no-phage-data/validation","data/virus-phage-data/validation")
 tensorboard_folder <- "tensorboard"
@@ -9,18 +9,18 @@ tensorboard_folder <- "tensorboard"
 train_Self_GenomeNet_forward_multilength(
   path            = train_data_folder,
   path_val        = validation_data_folder,
-  maxlen          = 150,
-  encoder         = encoder_virus_pretraining(150),
-  context         = context_virus_pretraining,
+  maxlen          = 1000,
+  encoder         = encoder_pretraining(1000),
+  context         = context_pretraining,
   loss_function   = loss_function_forward_multilength,
-  batch_size      = 512,
-  epochs          = 360,
+  batch_size      = 128,
+  epochs          = 1000,
   steps_per_epoch = 400,
   learningrate    = 0.0001,
   run_name        = paste("Self-GenomeNet_for_multi", format(Sys.time(), "_%y%m%d_%H%M"), sep = ""),
   path_tensorboard = tensorboard_folder,
   trained_model   = NULL,
   savemodels      = TRUE,
-  save_every_xth_epoch = 60,
+  save_every_xth_epoch = 100,
   proportion_per_seq = 0.9
 )
