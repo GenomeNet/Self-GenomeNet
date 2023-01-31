@@ -56,10 +56,10 @@ train_Self_GenomeNet <-
         )
     } else {
       fastrain <-
-        gen_rds(path,
+        generator_rds(path,
                 batch_size = batch_size)
       fasval <-
-        gen_rds(path_val,
+        generator_rds(path_val,
                 batch_size = batch_size)
     }
     # metrics
