@@ -1,4 +1,4 @@
-loss_function_reverse <- function(latents,
+loss_function_singlelength <- function(latents,
   context,
   target_dim = NULL,
   steps_to_ignore = 1,
