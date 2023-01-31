@@ -10,49 +10,51 @@ library(purrr)
 
 train_Self_GenomeNet_forward_multilength <-
   function(path,
-    path_val,
+    path.val,
     encoder,
     context,
     loss_function,
-    batch_size,
+    batch.size,
     epochs,
-    steps_per_epoch,
+    steps.per.epoch,
     learningrate,
-    run_name,
-    path_tensorboard,
+    run.name,
+    tensorboard.log,
     maxlen,
-    stepsmin = 3,
-    stepsmax = 4,
+    stepsmin = 1,
+    stepsmax = 2,
     file_step = NULL,
     file_max_samples = 64,
     trained_model = NULL,
     savemodels = FALSE,
-    proportion_per_seq = 0.9,
-    save_every_xth_epoch = 12) {
+    proportion_per_file = 0.9,
+    save_every_xth_epoch = 100) {
     # Prepare data
     cat("Preparing the data\n")
     if (is.null(file_step)) {
       file_step <- maxlen
     }
     fastrain <-
-      generator_fasta_lm(
+      fastaFileGenerator(
         path,
-        batch_size = batch_size,
+        batch.size = batch.size,
         maxlen = maxlen,
         step = file_step,
         max_samples = file_max_samples,
-        shuffle_file_order = TRUE,
-        proportion_per_seq = proportion_per_seq
+        randomFiles = TRUE,
+        proportion_per_file = proportion_per_file,
+        #seed = 3456
       )
     fasval <-
-      generator_fasta_lm(
-        path_val,
-        batch_size = batch_size,
+      fastaFileGenerator(
+        path.val,
+        batch.size = batch.size,
         maxlen = maxlen,
         step = file_step,
         max_samples = file_max_samples,
-        shuffle_file_order = TRUE,
-        proportion_per_seq = proportion_per_seq
+        randomFiles = TRUE,
+        proportion_per_file = proportion_per_file,
+        #seed = 3456
       )
     
     
@@ -74,36 +76,42 @@ train_Self_GenomeNet_forward_multilength <-
       layer <- trained_model$layers[[6]]
     }
     
-    
+    model_list <- list()
+    for (i in seq(47)){
+      model <- keras_model(
+          encoder$input,
+          loss_function(
+            encoder$output,
+            context_layer,
+            batch.size = batch.size,
+            steps_to_ignore = stepsmin,
+            steps_to_predict = stepsmax,
+            value =i,
+            layer =layer
+            )
+         )
+      model_list <- c(model_list, model)
+    }
     # connect tensorboard
-    logdir <- path_tensorboard
-    writertrain = tf$summary$create_file_writer(file.path(logdir, run_name, "/train"))
-    writerval = tf$summary$create_file_writer(file.path(logdir, run_name, "/validation"))
+    logdir <- tensorboard.log
+    writertrain = tf$summary$create_file_writer(file.path(logdir, run.name, "/train"))
+    writerval = tf$summary$create_file_writer(file.path(logdir, run.name, "/validation"))
     
     # batch loop
-    training_loop <- function(batches = steps_per_epoch, epoch) {
+    training_loop <- function(batches = steps.per.epoch, epoch) {
       #saveloss <- list()
       for (b in seq(batches)) {
-        val <- sample(seq(18), 1)
-        model <-
-          keras_model(
-            encoder$input,
-            loss_function(
-              encoder$output,
-              context_layer,
-              batch_size = batch_size,
-              steps_to_ignore = stepsmin,
-              steps_to_predict = stepsmax,
-              value = val,
-              layer = layer
-            )
-          )
+      #  if ((b%%10)==1){
+      val <- sample(seq(47), 1)
+      model <- model_list[[val]]
+         
+                    
+      #  }
         with(tf$GradientTape() %as% tape, {
           a <- fastrain()$X %>% tf$convert_to_tensor()
-          #implemented for 150-length virus pre-training for the model we use
           a_forward <-
-            tf$convert_to_tensor(array(as.array(a)[, c(seq(133 - val * 6, 150, 1), seq(1, 132 -
-                val * 6, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
+            tf$convert_to_tensor(array(as.array(a)[, c(seq(981 - val * 20, 1000, 1), seq(1, 980 -
+                val * 20, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
           a <- tf$concat(list(a, a_forward), axis = 0L)
           out <- model(a)
           l <- out[1]
@@ -138,27 +146,16 @@ train_Self_GenomeNet_forward_multilength <-
       train_acc$reset_states()
     }
     
-    val_loop <- function(batches = steps_per_epoch, epoch) {
+    val_loop <- function(batches = steps.per.epoch, epoch) {
       for (b in seq(ceiling(batches * 0.1))) {
-        val <- sample(seq(18), 1)
-        model <-
-          keras_model(
-            encoder$input,
-            loss_function(
-              encoder$output,
-              context_layer,
-              batch_size = batch_size,
-              steps_to_ignore = stepsmin,
-              steps_to_predict = stepsmax,
-              value = val,
-              layer = layer
-            )
-          )
+        val <- sample(seq(47), 1)
+        model <- model_list[[val]]
+      
         a <- fasval()$X %>% tf$convert_to_tensor()
         #implemented for 150-length virus pre-training for the model we use
         a_forward <-
-          tf$convert_to_tensor(array(as.array(a)[, c(seq(133 - val * 6, 150, 1), seq(1, 132 -
-              val * 6, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
+            tf$convert_to_tensor(array(as.array(a)[, c(seq(981 - val * 20, 1000, 1), seq(1, 980 -
+                val * 20, 1)), ], dim = c(dim(a)[1], dim(a)[2], dim(a)[3])))
         a <- tf$concat(list(a, a_forward), axis = 0L)
         out <- model(a)
         l <- out[1]
@@ -196,8 +193,8 @@ train_Self_GenomeNet_forward_multilength <-
         if (i %% save_every_xth_epoch == 0) {
           model %>% save_model_hdf5(
             paste(
-              "pretrained_models/",
-              run_name,
+              "/home/gunduza/projects/cpc_models/",
+              run.name,
               "_Epoch_",
               as.array(i),
               "_temp.h5",
