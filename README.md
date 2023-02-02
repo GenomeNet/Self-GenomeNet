@@ -16,7 +16,7 @@ bash Anaconda3-2019.10-Linux-x86_64.sh
 ```
 You may need to restart your terminal after installing Anaconda.
 
-Then you can create an environment and install the dependencies with the code below.
+Then, with the code below, you can create a conda environment and activate it, and install the dependencies: R, tensorflow, devtools (it is only needed to install deepG and should not be necessary to keep after the deepG installation), and deepG.
 
 ```
 conda create --name selfgenomenet
