@@ -8,6 +8,14 @@ While deep learning is frequently applied in bioinformatics, it is mostly limite
 
 ## Enviromental setup
 
+Please install the anaconda first.
+In Ubuntu, by running the code below:
+```
+wget https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh
+bash Anaconda3-2019.10-Linux-x86_64.sh
+```
+
+Then you can create an environment and install the dependencies with the code below.
 
 ```
 conda create --name selfgenomenet
