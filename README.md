@@ -8,6 +8,13 @@ While deep learning is frequently applied in bioinformatics, it is mostly limite
 
 ## Enviromental setup
 
+
+```
+conda create --name selfgenomenet
+conda activate selfgenomenet
+conda install pip
+```
+
 Our models are trained with GPUs. 
 
 The code is compatible with Python v3.7 and Tensorflow v2. See requirements.txt and requirements R.txt for all prerequisites. 
