@@ -15,6 +15,7 @@ conda activate selfgenomenet
 conda install -c r r r-essentials
 conda install python==3.7
 conda install tensorflow==2.2.0
+conda install -c anaconda hdf5
 R -e 'devtools::install_github("GenomeNet/deepG")'
 ```
 
