@@ -22,7 +22,6 @@ Then you can create an environment and install the dependencies with the code be
 conda create --name selfgenomenet
 conda activate selfgenomenet
 conda install -c conda-forge r-base=4.0.3
-conda install python==3.7
 conda install tensorflow==2.2.0
 conda install -c anaconda hdf5
 R -e 'devtools::install_github("GenomeNet/deepG")'
