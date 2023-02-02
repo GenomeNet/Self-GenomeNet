@@ -13,7 +13,9 @@ While deep learning is frequently applied in bioinformatics, it is mostly limite
 conda create --name selfgenomenet
 conda activate selfgenomenet
 conda install -c r r r-essentials
-conda install pip
+conda install python==3.7
+conda install tensorflow==2.2.0
+R -e 'devtools::install_github("GenomeNet/deepG")'
 ```
 
 Our models are trained with GPUs. 
