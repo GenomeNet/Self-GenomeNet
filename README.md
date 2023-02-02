@@ -14,6 +14,7 @@ In Ubuntu, by running the code below:
 wget https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh
 bash Anaconda3-2019.10-Linux-x86_64.sh
 ```
+You may need to restart your terminal after installing Anaconda.
 
 Then you can create an environment and install the dependencies with the code below.
 
