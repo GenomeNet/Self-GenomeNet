@@ -12,6 +12,7 @@ While deep learning is frequently applied in bioinformatics, it is mostly limite
 ```
 conda create --name selfgenomenet
 conda activate selfgenomenet
+conda install -c r r r-essentials
 conda install pip
 ```
 
