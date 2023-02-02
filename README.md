@@ -23,26 +23,11 @@ conda create --name selfgenomenet
 conda activate selfgenomenet
 conda install -c conda-forge r-base=4.0.3
 conda install tensorflow==2.2.0
-conda install -c anaconda hdf5
+R -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")'
 R -e 'devtools::install_github("GenomeNet/deepG")'
 ```
 
-Our models are trained with GPUs. 
 
-The code is compatible with Python v3.7 and Tensorflow v2. See requirements.txt and requirements R.txt for all prerequisites. 
-
-You can also install them using the following commands:
-
-```
-pip install -r requirements.txt
-
-while IFS=" " read -r package version;
-do
-  Rscript -e "devtools::install_version('"$package"', version='"$version"',repos = '"https://cloud.r-project.org"')";
-done < "requirementsR.txt"
-Rscript -e "devtools::install_github("GenomeNet/deepG")"
-```
-Please note, that the package ``devtools`` needs to be installed in prior.
 
 ## Pretraining: Self-supervised model
 
