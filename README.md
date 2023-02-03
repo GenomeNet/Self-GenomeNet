@@ -27,7 +27,11 @@ R -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")'
 R -e 'devtools::install_github("GenomeNet/deepG")'
 ```
 
+Finally, you clone this repo to your computer with the code below.
 
+```
+git clone https://github.com/GenomeNet/Self-GenomeNet.git
+```
 
 ## Pretraining: Self-supervised model
 
