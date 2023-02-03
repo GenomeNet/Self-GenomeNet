@@ -37,10 +37,13 @@ git clone https://github.com/GenomeNet/Self-GenomeNet.git
 
 First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
 
-To pretrain the model on virus data, try the following command:
+To pretrain the model on virus data, you can use either of the following commands for sequences of 150 nucleotide or 1000 seqences, respectively:
 
 ```
-Rscript R/Self-GenomeNet_pretraining/virus/run_train.R
+Rscript R/pretraining/virus/virus_seqlen150/run_train.R
+```
+```
+Rscript R/pretraining/virus/virus_seqlen1000/run_train.R
 ```
 
 For pretraining the model for deepSea data, try this command: 
