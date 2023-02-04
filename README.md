@@ -36,7 +36,7 @@ git clone https://github.com/GenomeNet/Self-GenomeNet.git
 
 ## Self-supervised Pretraining of Self-GenomeNet
 
-First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
+In practise, you can skip this part and directly use a pretrained model. Loading and training a pretrained model on a supervised task will be shown in the later chapters. However, if you have high amount of unlabeled data that is also similar to the data you will train your supervised training, you can train your model in a self-supervised way on your unlabeled data using Self-GenomeNet in order to increase the performance.
 
 To pretrain the model on virus data, you can use either of the following commands for sequences of 150 nucleotide or 1000 seqences, respectively:
 
@@ -95,7 +95,23 @@ Please note that the last one is our proposed method: Self-GenomeNet.
 
 ## Supervised Training of Self-GenomeNet
 
-We now want to use the pretrained self-supervised model in a supervised step for classification of the Genom's species type, so if it is a phage or a non-phage virus here. 
+Here, we will use pretrained model for a supervised task. In this example, the model will classify the genome sequence either as a phage or a non-phage virus. Please run the code of this part in R.
+
+### Loading the Pretrained Model
+Before training the model in a supervised way, you should load the pretrained model. Below we load the model pretrained on virus sequences of 1000 length. You could also load one of other pretrained models that can be found in the same folder, depending on your use-case.
+
+```
+model <- load_model_hdf5("/content/Self-GenomeNet/pretrained_models/virus_pretrained_1000.h5", compile = FALSE)
+```
+
+### Preparing the Pretrained Model for the Supervised Task
+We use the "prepare_model_for_supervision" function to prepare the model for the supervised learning after the self-supervision. This function removes the prediction layer of Self-GenomeNet and adds a new fully connected layer of size "number_of_classes". The model is also compiled. You can also adjust the learning rate by "lr" and decide whether the base network weights (pretrained CNN and RNN layers) are trained or not during the the supervised training by setting "trainable" argument to TRUE or FALSE, respectively.
+
+```
+model <- prepare_model_for_supervision(model, number_of_classes = 2, lr = 0.0001, trainable = FALSE)
+```
+
+### Running the Supervised Training
 
 To train the whole network on virus data, try the following command:
 
