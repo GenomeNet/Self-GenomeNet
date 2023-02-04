@@ -34,7 +34,7 @@ Finally, you clone this repo to your computer with the code below.
 git clone https://github.com/GenomeNet/Self-GenomeNet.git
 ```
 
-## Pretraining: Self-supervised model
+## Self-supervised Pretraining of Self-GenomeNet
 
 First, we will learn representations of the Genome Sequences with reverse-complements using contrastive learning.
 
@@ -60,6 +60,8 @@ For running the model on Bacteria data, please download some Bacteria data from 
 ```
 Rscript R/pretraining/bacteria/run_train.R
 ```
+
+### Ablation Analysis
 
 You can run the code used for the ablation analysis as below:
 
@@ -91,7 +93,7 @@ Rscript R/pretraining/train.R
 
 Please note that the last one is our proposed method: Self-GenomeNet.
 
-## Semi-supervised learning: Supervised part
+## Supervised Training of Self-GenomeNet
 
 We now want to use the pretrained self-supervised model in a supervised step for classification of the Genom's species type, so if it is a phage or a non-phage virus here. 
 
