@@ -49,7 +49,7 @@ Rscript R/pretraining/virus/virus_seqlen1000/run_train.R
 For pretraining the model for deepSea data, try this command: 
 
 ```
-Rscript R/Self-GenomeNet_pretraining/deepsea/run_train.R
+Rscript R/pretraining/deepsea/run_train.R
 ```
 Please note, that this is only a small part of the data used for presentation purpose. For running the model on full data to achieve the same results described in the paper, please download them from [the official homepage](http://deepsea.princeton.edu/job/analysis/create/) and run ``h5_to_rds.R``
 
@@ -57,14 +57,38 @@ Please note, that this is only a small part of the data used for presentation pu
 For running the model on Bacteria data, please download some Bacteria data from [NCBI](https://www.ncbi.nlm.nih.gov/assembly/) and put them in the folder ``data/bacteria``. Then run:
 
 ```
-Rscript R/Self-GenomeNet_pretraining/bacteria/run_train.R
+Rscript R/pretraining/bacteria/run_train.R
 ```
 
-Run the ablation pretraining using the command:
+You can run the code used for the ablation analysis as below:
+
+1. Supplementary Results / Experiments: Fixed-Length Targets vs. Varying-Length Targets
 
 ```
-Rscript R/Self-GenomeNet_pretraining_ablation/run_train_forward_singlelenght.R  # for the forward singlelength model
+Rscript R/pretraining_ablation/run_train_RC_singlelength.R 
 ```
+
+2. Supplementary Results / Experiments: Using Reverse-Complement Neighbor Sequences as Targets to Predict
+
+- Forward:
+
+```
+Rscript R/pretraining_ablation/run_train_forward_multilength.R
+```
+
+- Reverse
+ 
+```
+Rscript R/pretraining_ablation/run_train_reverse_multilength.R
+```
+
+- Reverse-complement:
+ 
+```
+Rscript R/pretraining/train.R
+```
+
+Please note that the last one is our proposed method: Self-GenomeNet.
 
 ## Semi-supervised learning: Supervised part
 
