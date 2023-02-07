@@ -23,7 +23,7 @@ Then, with the code below, you can create a conda environment and activate it, a
 conda create --name selfgenomenet
 conda activate selfgenomenet
 conda install -c conda-forge r-base=4.0.3
-conda install tensorflow==2.2.0
+conda install tensorflow==2.2.1
 R -e 'install.packages("devtools",repos = "http://cran.us.r-project.org")'
 R -e 'devtools::install_github("GenomeNet/deepG")'
 ```
