@@ -9,7 +9,7 @@ While deep learning is frequently applied in bioinformatics, it is mostly limite
 
 ## Enviromental setup
 
-Please install the anaconda first.
+Please install Anaconda first.
 In Ubuntu, by running the code below:
 ```
 wget https://repo.anaconda.com/archive/Anaconda3-2019.10-Linux-x86_64.sh
@@ -38,7 +38,7 @@ git clone https://github.com/GenomeNet/Self-GenomeNet.git
 
 In practise, you can skip this part and directly use a pretrained model. Loading and training a pretrained model on a supervised task will be shown in the later chapters. However, if you have high amount of unlabeled data that is also similar to the data you will train your supervised training, you can train your model in a self-supervised way on your unlabeled data using Self-GenomeNet in order to increase the performance.
 
-To pretrain the model on virus data, you can use either of the following commands for sequences of 150 nucleotide or 1000 seqences, respectively:
+To pretrain the model on virus data, you can use either of the following commands for sequences of 150 nucleotide or 1000 sequences, respectively:
 
 ```
 Rscript R/pretraining/virus/virus_seqlen150/run_train.R
