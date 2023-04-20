@@ -33,7 +33,7 @@ train_Self_GenomeNet <-
     if (is.null(file_step)) {
       file_step <- maxlen
     }
-    if (deepSea) {
+    if (!deepSea) {
       fastrain <-
         generator_fasta_lm(
           path,
