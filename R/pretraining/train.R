@@ -88,7 +88,7 @@ train_Self_GenomeNet <-
         format(Sys.time(), "%F %R"),
         ": Loading the trained model; will be compiled manually.\n"
       )
-      model <- load_model_hdf5(trained_model)
+      model <- load_model_hdf5(trained_model, compile=FALSE)
     }
     
     # connect tensorboard
