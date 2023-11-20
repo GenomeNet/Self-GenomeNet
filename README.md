@@ -3,6 +3,10 @@
 ## Abstact
 While deep learning is frequently applied in bioinformatics, it is mostly limited to problems where huge amounts of labeled data are present to train a classifier in a supervised manner. Here, we introduce Self-GenomeNet – a method that utilizes unlabeled genomic data to address the challenge of limited data availability through self-training, outperforming the standard supervised training, even when using ~10 times less labeled data.
 
+## Link to Publication
+
+https://www.nature.com/articles/s42003-023-05310-2
+
 ## Interactive notebook for self-supervised and supervised training of Self-GenomeNet on Google Colab
 <a href="https://colab.research.google.com/drive/1gEm8WvOmN30X9LzH7VV53KDLpTqncpNr?usp=sharing" target="_parent"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
 <!-- ADD TABLE? -->
